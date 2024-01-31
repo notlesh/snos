@@ -3,9 +3,12 @@ pub mod builtins;
 pub mod execution;
 pub mod syscalls;
 mod unimplemented;
+#[cfg(test)]
+mod tests;
 
 use std::collections::{HashMap, HashSet};
 
+use num_bigint::BigInt;
 use cairo_vm::hint_processor::builtin_hint_processor::builtin_hint_processor_definition::{
     BuiltinHintProcessor, HintProcessorData,
 };
@@ -334,5 +337,26 @@ pub fn breakpoint(
     println!("\tids -> {:?}", _ids_data);
 
     println!("\n-----------END BREAKPOINT-----------\n");
+    Ok(())
+}
+
+const IS_ON_CURVE: &str = "ids.is_on_curve = (y * y) % SECP_P == y_square_int";
+pub fn is_on_curve(
+    vm: &mut VirtualMachine,
+    exec_scopes: &mut ExecutionScopes,
+    ids_data: &HashMap<String, HintReference>,
+    ap_tracking: &ApTracking,
+    _constants: &HashMap<String, Felt252>,
+) -> Result<(), HintError> {
+    let y: BigInt = exec_scopes.get("y")?;
+    let y_square_int: BigInt = exec_scopes.get("y_square_int")?;
+    // TODO: assume SECP_P is in scope, or should we use this constant?
+    // let SECP_P = cairo_vm::hint_processor::builtin_hint_processor::secp::secp_utils::SECP_P;
+    let SECP_P: BigInt = exec_scopes.get("SECP_P")?;
+
+    let is_on_curve = (y.clone() * y) % SECP_P == y_square_int;
+    let is_on_curve: Felt252 = if is_on_curve { Felt252::from(1) } else { Felt252::from(0) };
+    insert_value_from_var_name("is_on_curve", is_on_curve, vm, ids_data, ap_tracking)?;
+
     Ok(())
 }
