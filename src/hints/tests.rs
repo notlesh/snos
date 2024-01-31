@@ -34,7 +34,8 @@ mod tests {
         is_on_curve(&mut vm, &mut exec_scopes, &ids_data, &ap_tracking, &Default::default())
             .expect("is_on_curve() failed");
 
-        let is_on_curve: Felt252 = exec_scopes.get("is_on_curve")
+        // TODO: is_on_curve should exist in ids_data, not exec_scopes
+        let is_on_curve: Felt252 = ids_data.get("is_on_curve")
             .expect("is_on_curve local var should be defined in hint");
         assert_eq!(is_on_curve, 1.into());
     }
