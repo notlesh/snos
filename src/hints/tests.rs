@@ -36,6 +36,8 @@ mod tests {
     #[test]
     fn test_is_on_curve() {
         let mut vm = VirtualMachine::new(false);
+        vm.set_fp(1);
+        vm.add_memory_segment();
         vm.add_memory_segment();
 
         // let ids_data = HashMap::from( [("is_on_curve".to_string(), HintReference::new_simple(-1))]);
