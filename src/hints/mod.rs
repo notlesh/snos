@@ -349,9 +349,9 @@ pub fn is_on_curve(
     _constants: &HashMap<String, Felt252>,
 ) -> Result<(), HintError> {
     let y: BigInt = exec_scopes.get("y")?;
+    // TODO: should y_square_int be calculated or should caller put it in scope for us?
     let y_square_int: BigInt = exec_scopes.get("y_square_int")?;
-    // TODO: assume SECP_P is in scope, or should we use this constant?
-    // let SECP_P = cairo_vm::hint_processor::builtin_hint_processor::secp::secp_utils::SECP_P;
+    // TODO: should SECP_P be expected to be in scope, or should it exist implicitly (e.g. as a constant)?
     let SECP_P: BigInt = exec_scopes.get("SECP_P")?;
 
     let is_on_curve = (y.clone() * y) % SECP_P == y_square_int;

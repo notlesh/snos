@@ -40,7 +40,6 @@ mod tests {
         vm.add_memory_segment();
         vm.add_memory_segment();
 
-        // let ids_data = HashMap::from( [("is_on_curve".to_string(), HintReference::new_simple(-1))]);
         let ids_data = ids_data!["is_on_curve"];
         let ap_tracking = ApTracking::default();
 
@@ -53,7 +52,7 @@ mod tests {
         exec_scopes.insert_value("y_square_int", y_square_int);
 
         // TODO: use an appropriate constant for SECP_P. Also see TODO in `fn is_on_curve` -- should it be in
-        // exec_scopes to begin with?
+        // exec_scopes to begin with, or should it implicitly exist in the hint itself?
         use std::str::FromStr;
         let SECP_P = BigInt::from_str("115792089237316195423570985008687907853269984665640564039457584007908834671663").unwrap();
         exec_scopes.insert_value("SECP_P", SECP_P);
