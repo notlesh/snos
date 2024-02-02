@@ -340,6 +340,7 @@ pub fn breakpoint(
     Ok(())
 }
 
+#[allow(unused)]
 const IS_ON_CURVE: &str = "ids.is_on_curve = (y * y) % SECP_P == y_square_int";
 pub fn is_on_curve(
     vm: &mut VirtualMachine,
@@ -353,9 +354,9 @@ pub fn is_on_curve(
     let y_square_int: BigInt = exec_scopes.get("y_square_int")?;
     // TODO: should SECP_P be expected to be in scope, or should it exist implicitly (e.g. as a
     // constant)?
-    let SECP_P: BigInt = exec_scopes.get("SECP_P")?;
+    let secp_p: BigInt = exec_scopes.get("SECP_P")?;
 
-    let is_on_curve = (y.clone() * y) % SECP_P == y_square_int;
+    let is_on_curve = (y.clone() * y) % secp_p == y_square_int;
     let is_on_curve: Felt252 = if is_on_curve { Felt252::from(1) } else { Felt252::from(0) };
     insert_value_from_var_name("is_on_curve", is_on_curve, vm, ids_data, ap_tracking)?;
 

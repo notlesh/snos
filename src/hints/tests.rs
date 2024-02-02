@@ -52,9 +52,9 @@ mod tests {
         // TODO: use an appropriate constant for SECP_P. Also see TODO in `fn is_on_curve` -- should it be
         // in exec_scopes to begin with, or should it implicitly exist in the hint itself?
         use std::str::FromStr;
-        let SECP_P =
+        let secp_p =
             BigInt::from_str("115792089237316195423570985008687907853269984665640564039457584007908834671663").unwrap();
-        exec_scopes.insert_value("SECP_P", SECP_P);
+        exec_scopes.insert_value("SECP_P", secp_p);
 
         is_on_curve(&mut vm, &mut exec_scopes, &ids_data, &ap_tracking, &Default::default())
             .expect("is_on_curve() failed");
