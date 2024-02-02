@@ -1,16 +1,14 @@
 #[cfg(test)]
 mod tests {
 
-    use cairo_vm::{
-        serde::deserialize_program::ApTracking,
-        types::exec_scope::ExecutionScopes,
-    };
+    use cairo_vm::serde::deserialize_program::ApTracking;
+    use cairo_vm::types::exec_scope::ExecutionScopes;
     use num_bigint::BigInt;
 
     use crate::hints::*;
 
     macro_rules! references {
-        ($num: expr) => {{
+        ($num:expr) => {{
             let mut references = cairo_vm::stdlib::collections::HashMap::<usize, HintReference>::new();
             for i in 0..$num {
                 references.insert(i as usize, HintReference::new_simple((i as i32 - $num)));
@@ -51,10 +49,11 @@ mod tests {
         exec_scopes.insert_value("y", y);
         exec_scopes.insert_value("y_square_int", y_square_int);
 
-        // TODO: use an appropriate constant for SECP_P. Also see TODO in `fn is_on_curve` -- should it be in
-        // exec_scopes to begin with, or should it implicitly exist in the hint itself?
+        // TODO: use an appropriate constant for SECP_P. Also see TODO in `fn is_on_curve` -- should it be
+        // in exec_scopes to begin with, or should it implicitly exist in the hint itself?
         use std::str::FromStr;
-        let SECP_P = BigInt::from_str("115792089237316195423570985008687907853269984665640564039457584007908834671663").unwrap();
+        let SECP_P =
+            BigInt::from_str("115792089237316195423570985008687907853269984665640564039457584007908834671663").unwrap();
         exec_scopes.insert_value("SECP_P", SECP_P);
 
         is_on_curve(&mut vm, &mut exec_scopes, &ids_data, &ap_tracking, &Default::default())

@@ -3,7 +3,6 @@ use indoc::indoc;
 #[allow(unused)]
 const IS_N_GE_TWO: &str = "memory[ap] = to_felt_or_relocatable(ids.n >= 2)";
 
-
 #[allow(unused)]
 const SET_SYSCALL_PTR: &str = indoc! {r#"
 	ids.os_context = segments.add()

@@ -2,13 +2,12 @@ pub mod block_context;
 pub mod builtins;
 pub mod execution;
 pub mod syscalls;
-mod unimplemented;
 #[cfg(test)]
 mod tests;
+mod unimplemented;
 
 use std::collections::{HashMap, HashSet};
 
-use num_bigint::BigInt;
 use cairo_vm::hint_processor::builtin_hint_processor::builtin_hint_processor_definition::{
     BuiltinHintProcessor, HintProcessorData,
 };
@@ -24,6 +23,7 @@ use cairo_vm::vm::runners::cairo_runner::{ResourceTracker, RunResources};
 use cairo_vm::vm::vm_core::VirtualMachine;
 use cairo_vm::Felt252;
 use indoc::indoc;
+use num_bigint::BigInt;
 
 use crate::config::DEFAULT_INPUT_PATH;
 use crate::io::input::StarknetOsInput;
@@ -351,7 +351,8 @@ pub fn is_on_curve(
     let y: BigInt = exec_scopes.get("y")?;
     // TODO: should y_square_int be calculated or should caller put it in scope for us?
     let y_square_int: BigInt = exec_scopes.get("y_square_int")?;
-    // TODO: should SECP_P be expected to be in scope, or should it exist implicitly (e.g. as a constant)?
+    // TODO: should SECP_P be expected to be in scope, or should it exist implicitly (e.g. as a
+    // constant)?
     let SECP_P: BigInt = exec_scopes.get("SECP_P")?;
 
     let is_on_curve = (y.clone() * y) % SECP_P == y_square_int;
