@@ -352,11 +352,9 @@ pub fn is_on_curve(
 ) -> Result<(), HintError> {
     let y: BigInt = exec_scopes.get("y")?;
     let y_square_int: BigInt = exec_scopes.get("y_square_int")?;
-    // TODO: assume SECP_P is in scope, or should we use this constant?
-    // let SECP_P = cairo_vm::hint_processor::builtin_hint_processor::secp::secp_utils::SECP_P;
-    let SECP_P: BigInt = exec_scopes.get("SECP_P")?;
+    let sec_p: BigInt = exec_scopes.get("SECP_P")?;
 
-    let is_on_curve = (y.clone() * y) % SECP_P == y_square_int;
+    let is_on_curve = (y.clone() * y) % sec_p == y_square_int;
     let is_on_curve: Felt252 = if is_on_curve { Felt252::ONE } else { Felt252::ZERO };
     insert_value_from_var_name("is_on_curve", is_on_curve, vm, ids_data, ap_tracking)?;
 
