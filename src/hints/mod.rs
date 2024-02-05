@@ -350,13 +350,13 @@ pub fn is_on_curve(
     ap_tracking: &ApTracking,
     _constants: &HashMap<String, Felt252>,
 ) -> Result<(), HintError> {
-    let y: BigInt = exec_scopes.get("y")?;
-    let y_square_int: BigInt = exec_scopes.get("y_square_int")?;
-    let sec_p: BigInt = exec_scopes.get("SECP_P")?;
+    let y: BigInt = exec_scopes.get(vars::ids::Y)?;
+    let y_square_int: BigInt = exec_scopes.get(vars::ids::Y_SQUARE_INT)?;
+    let sec_p: BigInt = exec_scopes.get(vars::ids::SECP_P)?;
 
     let is_on_curve = (y.clone() * y) % sec_p == y_square_int;
     let is_on_curve: Felt252 = if is_on_curve { Felt252::ONE } else { Felt252::ZERO };
-    insert_value_from_var_name("is_on_curve", is_on_curve, vm, ids_data, ap_tracking)?;
+    insert_value_from_var_name(vars::ids::IS_ON_CURVE, is_on_curve, vm, ids_data, ap_tracking)?;
 
     Ok(())
 }

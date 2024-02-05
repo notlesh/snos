@@ -38,7 +38,7 @@ mod tests {
         vm.add_memory_segment();
         vm.add_memory_segment();
 
-        let ids_data = ids_data!["is_on_curve"];
+        let ids_data = ids_data![vars::ids::IS_ON_CURVE];
         let ap_tracking = ApTracking::default();
 
         let mut exec_scopes = ExecutionScopes::new();
@@ -46,20 +46,20 @@ mod tests {
         let y = BigInt::from(1234);
         let y_square_int = y.clone() * y.clone();
 
-        exec_scopes.insert_value("y", y);
-        exec_scopes.insert_value("y_square_int", y_square_int);
+        exec_scopes.insert_value(vars::ids::Y, y);
+        exec_scopes.insert_value(vars::ids::Y_SQUARE_INT, y_square_int);
 
         // TODO: use an appropriate constant for SECP_P. Also see TODO in `fn is_on_curve` -- should it be
         // in exec_scopes to begin with, or should it implicitly exist in the hint itself?
         use std::str::FromStr;
         let secp_p =
             BigInt::from_str("115792089237316195423570985008687907853269984665640564039457584007908834671663").unwrap();
-        exec_scopes.insert_value("SECP_P", secp_p);
+        exec_scopes.insert_value(vars::ids::SECP_P, secp_p);
 
         is_on_curve(&mut vm, &mut exec_scopes, &ids_data, &ap_tracking, &Default::default())
             .expect("is_on_curve() failed");
 
-        let is_on_curve: Felt252 = get_integer_from_var_name("is_on_curve", &vm, &ids_data, &ap_tracking)
+        let is_on_curve: Felt252 = get_integer_from_var_name(vars::ids::IS_ON_CURVE, &vm, &ids_data, &ap_tracking)
             .expect("is_on_curve should be put in ids_data")
             .into_owned();
         assert_eq!(is_on_curve, 1.into());
