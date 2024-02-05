@@ -7,9 +7,6 @@ mod tests;
 mod unimplemented;
 mod vars;
 
-#[cfg(test)]
-mod tests;
-
 use std::collections::{HashMap, HashSet};
 
 use cairo_vm::hint_processor::builtin_hint_processor::builtin_hint_processor_definition::{
