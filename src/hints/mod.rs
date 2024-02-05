@@ -5,6 +5,7 @@ pub mod syscalls;
 #[cfg(test)]
 mod tests;
 mod unimplemented;
+mod vars;
 
 use std::collections::{HashMap, HashSet};
 
