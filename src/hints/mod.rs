@@ -2,14 +2,13 @@ pub mod block_context;
 pub mod builtins;
 pub mod execution;
 pub mod syscalls;
-mod unimplemented;
 #[cfg(test)]
 mod tests;
+mod unimplemented;
 mod vars;
 
 use std::collections::{HashMap, HashSet};
 
-use num_bigint::BigInt;
 use cairo_vm::hint_processor::builtin_hint_processor::builtin_hint_processor_definition::{
     BuiltinHintProcessor, HintProcessorData,
 };
@@ -25,6 +24,7 @@ use cairo_vm::vm::runners::cairo_runner::{ResourceTracker, RunResources};
 use cairo_vm::vm::vm_core::VirtualMachine;
 use cairo_vm::Felt252;
 use indoc::indoc;
+use num_bigint::BigInt;
 
 use crate::config::DEFAULT_INPUT_PATH;
 use crate::io::input::StarknetOsInput;
