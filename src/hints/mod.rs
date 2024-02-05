@@ -5,6 +5,9 @@ pub mod syscalls;
 mod unimplemented;
 mod vars;
 
+#[cfg(test)]
+mod tests;
+
 use std::collections::{HashMap, HashSet};
 
 use cairo_vm::hint_processor::builtin_hint_processor::builtin_hint_processor_definition::{
@@ -335,5 +338,20 @@ pub fn breakpoint(
     println!("\tids -> {:?}", _ids_data);
 
     println!("\n-----------END BREAKPOINT-----------\n");
+    Ok(())
+}
+
+#[allow(unused)]
+const IS_N_GE_TWO: &str = "memory[ap] = to_felt_or_relocatable(ids.n >= 2)";
+pub fn is_n_ge_two(
+    vm: &mut VirtualMachine,
+    _exec_scopes: &mut ExecutionScopes,
+    ids_data: &HashMap<String, HintReference>,
+    ap_tracking: &ApTracking,
+    _constants: &HashMap<String, Felt252>,
+) -> Result<(), HintError> {
+    let n = get_integer_from_var_name("n", vm, ids_data, ap_tracking)?.into_owned();
+    let value = if n >= Felt252::TWO { Felt252::ONE } else { Felt252::ZERO };
+    insert_value_into_ap(vm, value)?;
     Ok(())
 }
