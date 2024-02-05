@@ -9,4 +9,5 @@ pub mod ids {
     pub const SYSCALL_PTR: &str = "syscall_ptr";
     pub const Y: &str = "y";
     pub const Y_SQUARE_INT: &str = "y_square_int";
+    pub const N: &str = "n";
 }
