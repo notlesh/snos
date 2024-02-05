@@ -37,7 +37,7 @@ type HintImpl = fn(
     &HashMap<String, Felt252>,
 ) -> Result<(), HintError>;
 
-static HINTS: [(&str, HintImpl); 49] = [
+static HINTS: [(&str, HintImpl); 50] = [
     // (BREAKPOINT, breakpoint),
     (STARKNET_OS_INPUT, starknet_os_input),
     (INITIALIZE_STATE_CHANGES, initialize_state_changes),
@@ -88,6 +88,7 @@ static HINTS: [(&str, HintImpl); 49] = [
     (syscalls::SEND_MESSAGE_TO_L1, syscalls::send_message_to_l1),
     (syscalls::STORAGE_READ, syscalls::storage_read),
     (syscalls::STORAGE_WRITE, syscalls::storage_write),
+    (IS_ON_CURVE, is_on_curve),
 ];
 
 /// Hint Extensions extend the current map of hints used by the VM.
@@ -341,8 +342,7 @@ pub fn breakpoint(
     Ok(())
 }
 
-#[allow(unused)]
-const IS_ON_CURVE: &str = "ids.is_on_curve = (y * y) % SECP_P == y_square_int";
+pub const IS_ON_CURVE: &str = "ids.is_on_curve = (y * y) % SECP_P == y_square_int";
 pub fn is_on_curve(
     vm: &mut VirtualMachine,
     exec_scopes: &mut ExecutionScopes,
