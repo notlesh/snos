@@ -48,7 +48,3 @@ zip = { version = "0.6.6", features = ["deflate-zlib"] }
 pretty_assertions = "1.4.0"
 rand = "0.8.5"
 rstest = "0.18.2"
-
-[patch."https://github.com/notlesh/starknet-replay"]
-replay = { path = "../starknet-replay/replay" }
-rpc-state-reader = { path = "../starknet-replay/rpc-state-reader" }
