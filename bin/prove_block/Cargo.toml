@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 blockifier = { git = "https://github.com/Moonsong-Labs/blockifier", branch = "msl/derive-clone", features = ["testing"] }
+cairo-lang-starknet-classes = { version = "2.6.3" }
 cairo-vm = { git = "https://github.com/lambdaclass/cairo-vm", features = ["extensive_hints", "cairo-1-hints"] }
 clap = { version = "4.5.7", features = ["derive"] }
 pathfinder-common = { git = "https://github.com/Moonsong-Labs/pathfinder", rev = "49a2de4ef52726d1fb5ef906ff95f48af8076169", package = "pathfinder-common" }
@@ -16,6 +17,8 @@ serde = { version = "1.0.203", features = ["derive"] }
 serde_json = { version = "1.0.117", features = ["arbitrary_precision"] }
 serde_with = { version = "3.8.1" }
 snos = { path = "../.." }
+replay = { git = "https://github.com/notlesh/starknet-replay" }
+rpc-state-reader = { git = "https://github.com/notlesh/starknet-replay" }
 reqwest = "0.11.27"
 tokio = "1.38.0"
 starknet_api = "0.10.0"

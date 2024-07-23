@@ -5,7 +5,11 @@ use std::future::Future;
 use async_stream::stream;
 use blockifier::block::{BlockInfo, GasPrices};
 use blockifier::context::{BlockContext, ChainInfo, FeeTokenAddresses};
+use blockifier::state::cached_state::CachedState;
+use blockifier::transaction::objects::TransactionExecutionInfo;
+use blockifier::transaction::transactions::ExecutableTransaction;
 use blockifier::versioned_constants::VersionedConstants;
+use cairo_lang_starknet_classes::casm_contract_class::CasmContractClass;
 use cairo_vm::types::layout_name::LayoutName;
 use cairo_vm::vm::errors::cairo_run_errors::CairoRunError::VmException;
 use cairo_vm::Felt252;
@@ -37,7 +41,8 @@ use starknet::core::types::{
 use starknet::providers::jsonrpc::HttpTransport;
 use starknet::providers::{JsonRpcClient, Provider, Url};
 use starknet_api::block::{BlockNumber, BlockTimestamp};
-use starknet_api::core::{ContractAddress, PatriciaKey};
+use starknet_api::core::{ClassHash, ContractAddress, PatriciaKey};
+use starknet_api::deprecated_contract_class::ContractClass as DeprecatedCompiledClass;
 use starknet_api::hash::StarkHash;
 use starknet_api::{contract_address, patricia_key, stark_felt};
 use starknet_types_core::felt::Felt;
@@ -337,7 +342,33 @@ async fn build_initial_state(
             ffc_for_class_hash: ffc_for_contract_class,
         }
     ))
-} 
+}
+
+/*
+/// Re-execute a block's transactions through blockifier. This yields a list of calls and storage
+/// reads/writes which can be replayed by the OS. The OS executes calls out of order, which
+/// requires being able to play through the storage operations in their original order.
+///
+/// TODO: reference some documentation about this?
+async fn reexecute_with_blockifier(
+    mut state: CachedState<SharedState<CachedRpcStorage, PedersenHash>>,
+    block_context: &BlockContext,
+    txs: Vec<starknet::core::types::Transaction>,
+    deprecated_contract_classes: HashMap<ClassHash, DeprecatedCompiledClass>,
+    contract_classes: HashMap<ClassHash, CasmContractClass>,
+) -> Result<Vec<TransactionExecutionInfo>, Box<dyn Error>> {
+    let execution_infos =
+        txs.into_iter().map(|tx| {
+            let blockifier_tx = blockifier::transaction::transaction_execution::Transaction::from_api(tx);
+            tx.execute(&mut state, block_context, true, true).unwrap()
+        }
+    ).collect();
+
+    Ok(execution_infos)
+}
+*/
+
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -569,6 +600,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
         &mut initial_state.ffc,
     ).await?;
 
+    /*
+    // re-execute txns through blockifier
+    let tx_execution_infos = reexecute_with_blockifier(
+        CachedState::<_>::from(initial_state),
+        &block_context,
+        block_with_txs.transactions,
+        Default::default(), // TODO: deprecated_contract_classes
+        Default::default(), // TODO: contract_classes
+    ).await?;
+    */
+
     let os_input = StarknetOsInput {
         contract_state_commitment_info,
         contract_class_commitment_info: Default::default(),
@@ -583,7 +625,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     };
     let execution_helper = ExecutionHelperWrapper::<CachedRpcStorage>::new(
         contract_storages,
-        Default::default(), // tx_execution_infos
+        Default::default(), // TODO: tx_execution_infos,
         &block_context,
         (old_block_number, old_block_hash),
     );
@@ -610,3 +652,4 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+

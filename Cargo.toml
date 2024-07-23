@@ -10,9 +10,9 @@ assert_matches = "1.5.0"
 base64 = "0.21.3"
 bitvec = { version = "1.0.1", features = ["serde"] }
 blockifier = { git = "https://github.com/Moonsong-Labs/blockifier", branch = "msl/derive-clone", features = ["testing"] }
-cairo-lang-starknet = { version = "2.6.3" }
-cairo-lang-starknet-classes = { version = "2.6.3" }
-cairo-lang-casm = { version = "2.6.3" }
+cairo-lang-starknet = { version = "2.6.4" }
+cairo-lang-starknet-classes = { version = "2.6.4" }
+cairo-lang-casm = { version = "2.6.4" }
 cairo-type-derive = { version = "0.1.0", path = "cairo-type-derive" }
 cairo-vm = { git = "https://github.com/lambdaclass/cairo-vm", features = ["extensive_hints", "cairo-1-hints"] }
 env_logger = "0.11.3"
@@ -48,3 +48,7 @@ zip = { version = "0.6.6", features = ["deflate-zlib"] }
 pretty_assertions = "1.4.0"
 rand = "0.8.5"
 rstest = "0.18.2"
+
+[patch."https://github.com/notlesh/starknet-replay"]
+replay = { path = "../starknet-replay/replay" }
+rpc-state-reader = { path = "../starknet-replay/rpc-state-reader" }
